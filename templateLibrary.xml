@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Templates xmlns:abc="http://example.com/myapp" xmlns:os="http://ns.opensocial.org/2008/markup">
+    <Namespace prefix="abc" url="http://example.com/myapp" />
+
+    <Template tag="abc:question">
+        <os:Var key="counter" value="0" />
+        <h3>${question.question}</h3>
+        <p if="${show_custom}">
+            ${My.innerHTML}
+        </p>
+        <ul>
+            <li repeat="${question.answers}">
+                #${Context.Index}: <a href="javascript:;" class="answer_link">${Cur}</a>
+                <os:Var key="counter" value="${counter + 1}" />
+            </li>
+        </ul>
+        <p>You have ${counter} options</p>
+    </Template>
+</Templates>

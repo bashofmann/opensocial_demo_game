@@ -38,16 +38,8 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 <p>Hello <?= $data[0]['result']['displayName'] ?> from Proxied Content.</p>
 
-<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="question" autoUpdate="true">
-    <os:Var key="counter" value="0" />
-    <h3>${question.question}</h3>
-    <ul>
-        <li repeat="${question.answers}">
-            #${Context.Index}: <a href="javascript:;" class="answer_link">${Cur}</a>
-            <os:Var key="counter" value="${counter + 1}" />
-        </li>
-    </ul>
-    <p>You have ${counter} options</p>
+<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" xmlns:abc="http://example.com/myapp" require="question" autoUpdate="true">
+    <abc:question question="${question}" show_custom="true">Custom text</abc:question>
 </script>
 <script type="text/javascript">
     gadgets.util.registerOnLoadHandler(function() {
