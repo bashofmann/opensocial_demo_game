@@ -38,7 +38,14 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 <p>Hello <?= $data[0]['result']['displayName'] ?> from Proxied Content.</p>
 
-
+<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="question" autoUpdate="true">
+    <h3>${question.question}</h3>
+    <ul>
+        <li repeat="${question.answers}">
+            #${Context.Index}: <a href="javascript:;" class="answer_link">${Cur}</a>
+        </li>
+    </ul>
+</script>
 <script type="text/javascript">
     gadgets.util.registerOnLoadHandler(function() {
         osapi.http.get({
@@ -46,7 +53,7 @@ $data = json_decode(file_get_contents('php://input'), true);
             'format' : 'json',
             'authz' : 'signed'
         }).execute(function(response) {
-            console.log(response);
+            opensocial.data.DataContext.putDataSet('question', response.content);
         });
     });
 </script>
