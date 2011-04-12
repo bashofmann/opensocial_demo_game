@@ -7,6 +7,8 @@
         <Require feature="opensocial-templates">
         </Require>
         <Require feature="osapi" />
+
+        <AllowedDomain name="localhost" />
     </ModulePrefs>
     <Content type="html" view="canvas" href="proxiedContent.php" authz="signed">
         <script xmlns:os="http://ns.opensocial.org/2008/markup" type="text/os-data">

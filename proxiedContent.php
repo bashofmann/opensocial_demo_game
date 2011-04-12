@@ -37,3 +37,16 @@ $data = json_decode(file_get_contents('php://input'), true);
 </script>
 
 <p>Hello <?= $data[0]['result']['displayName'] ?> from Proxied Content.</p>
+
+
+<script type="text/javascript">
+    gadgets.util.registerOnLoadHandler(function() {
+        osapi.http.get({
+            'href' : 'http://localhost:8062/demo_game/backend/questions.php',
+            'format' : 'json',
+            'authz' : 'signed'
+        }).execute(function(response) {
+            console.log(response);
+        });
+    });
+</script>
