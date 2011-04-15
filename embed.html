@@ -1,0 +1,18 @@
+<b>Can you answer this question:</b>
+<p id="question"></p>
+<a href="javascript:;" id="game_link">go to the game</a>
+<script type="text/javascript">
+    gadgets.util.registerOnLoadHandler(function() {
+        var questionId = gadgets.views.getParams()['question'];
+        osapi.http.get({
+            'href' : 'http://localhost:8062/demo_game/backend/question.php?question=' + encodeURIComponent(questionId),
+            'format' : 'json',
+            'authtz' : 'signed'
+        }).execute(function(response) {
+            $('#question').html(response.content);
+        });
+        $('#game_link').click(function() {
+            vz.invite.install();
+        });
+    });
+</script>

@@ -75,6 +75,15 @@ $data = json_decode(file_get_contents('php://input'), true);
                 loadQuestion();
             });
         });
+        $('a.link_post_to_wall').unbind('click').click(function() {
+            vz.embed.getEmbedUrl({question: $(this).attr('id').replace('link_', '')}, function(embedUrl) {
+                var params = [];
+                params[opensocial.Message.Field.TYPE] = opensocial.Message.Type.PUBLIC_MESSAGE;
+                var message = opensocial.newMessage('Have a look: ' + embedUrl, params);
+                var recipient = "VIEWER";
+                opensocial.requestSendMessage(recipient, message);
+            });
+        });
     }
     function loadCurrentHighScore() {
         osapi.http.get({
