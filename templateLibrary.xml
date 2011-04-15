@@ -10,7 +10,7 @@
         </p>
         <ul>
             <li repeat="${question.answers}">
-                #${Context.Index}: <a href="javascript:;" class="answer_link">${Cur}</a>
+                #${Context.Index}: <a href="javascript:;" class="answer_link" id="question_${question.id}">${Cur}</a>
                 <os:Var key="counter" value="${counter + 1}" />
             </li>
         </ul>

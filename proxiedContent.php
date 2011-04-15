@@ -38,10 +38,42 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 <p>Hello <?= $data[0]['result']['displayName'] ?> from Proxied Content.</p>
 
+<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="highscore" autoUpdate="true">
+    <h3>
+        Your current HighScore: ${highscore}
+        <span if="${highscore > 10}">
+            Awesome!
+        </span>
+    </h3>
+</script>
 <script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" xmlns:abc="http://example.com/myapp" require="question" autoUpdate="true">
     <abc:question question="${question}" show_custom="true">Custom text</abc:question>
 </script>
 <script type="text/javascript">
+    function bindAnswerLinks() {
+        $('a.answer_link').click(function() {
+            osapi.http.post({
+                'href': 'http://localhost:8062/demo_game/backend/answer.php',
+                'format': 'json',
+                'authz' : 'signed',
+                'body' : gadgets.io.encodeValues({
+                    'question' : $(this).attr('id').replace('question_', ''),
+                    'answer' : $(this).html()
+                })
+            }).execute(function(response) {
+                loadCurrentHighScore();
+            });
+        });
+    }
+    function loadCurrentHighScore() {
+        osapi.http.get({
+            'href' : 'http://localhost:8062/demo_game/backend/highscore.php',
+            'format' : 'json',
+            'authtz' : 'signed'
+        }).execute(function(response) {
+            opensocial.data.DataContext.putDataSet('highscore', response.content);
+        });
+    }
     gadgets.util.registerOnLoadHandler(function() {
         osapi.http.get({
             'href' : 'http://localhost:8062/demo_game/backend/questions.php',
@@ -49,6 +81,8 @@ $data = json_decode(file_get_contents('php://input'), true);
             'authz' : 'signed'
         }).execute(function(response) {
             opensocial.data.DataContext.putDataSet('question', response.content);
+            bindAnswerLinks();
         });
+        loadCurrentHighScore();
     });
 </script>

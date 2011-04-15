@@ -8,7 +8,8 @@
             <Param name="requireLibrary">templateLibrary.xml</Param>
         </Require>
         <Require feature="osapi" />
-
+        <Require feature="org.jquery.core-1.4.2" />
+        
         <AllowedDomain name="localhost" />
     </ModulePrefs>
     <Content type="html" view="canvas" href="proxiedContent.php" authz="signed">

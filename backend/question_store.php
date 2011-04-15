@@ -10,11 +10,12 @@ while ( ($data = fgetcsv ($handle, 1000, ";")) !== FALSE ) {
     $answers = array($data[1], $data[2], $data[3], $data[4]);
     shuffle($answers);
     $question = array(
+        'id' => $i - 1,
         'question' => $data[0],
         'answer_correct' => $data[1],
         'answers' => $answers,
     );
-    $questions[] = $question;
+    $questions[$i - 1] = $question;
 }
 fclose ($handle);
 
