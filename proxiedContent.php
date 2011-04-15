@@ -46,12 +46,21 @@ $data = json_decode(file_get_contents('php://input'), true);
         </span>
     </h3>
 </script>
+
+<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="lastAnswer" autoUpdate="true">
+    <os:If condition="${lastAnswer == 1}">
+        <p>Answer was correct</p>
+    </os:If>
+    <os:If condition="${lastAnswer != 1}">
+       <p>Answer was wrong</p>
+    </os:If>
+</script>
 <script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" xmlns:abc="http://example.com/myapp" require="question" autoUpdate="true">
     <abc:question question="${question}" show_custom="true">Custom text</abc:question>
 </script>
 <script type="text/javascript">
     function bindAnswerLinks() {
-        $('a.answer_link').click(function() {
+        $('a.answer_link').unbind('click').click(function() {
             osapi.http.post({
                 'href': 'http://localhost:8062/demo_game/backend/answer.php',
                 'format': 'json',
@@ -61,7 +70,9 @@ $data = json_decode(file_get_contents('php://input'), true);
                     'answer' : $(this).html()
                 })
             }).execute(function(response) {
+                opensocial.data.DataContext.putDataSet('lastAnswer', response.content);
                 loadCurrentHighScore();
+                loadQuestion();
             });
         });
     }
@@ -74,7 +85,7 @@ $data = json_decode(file_get_contents('php://input'), true);
             opensocial.data.DataContext.putDataSet('highscore', response.content);
         });
     }
-    gadgets.util.registerOnLoadHandler(function() {
+    function loadQuestion() {
         osapi.http.get({
             'href' : 'http://localhost:8062/demo_game/backend/questions.php',
             'format' : 'json',
@@ -83,6 +94,9 @@ $data = json_decode(file_get_contents('php://input'), true);
             opensocial.data.DataContext.putDataSet('question', response.content);
             bindAnswerLinks();
         });
+    }
+    gadgets.util.registerOnLoadHandler(function() {
+        loadQuestion();
         loadCurrentHighScore();
     });
 </script>
