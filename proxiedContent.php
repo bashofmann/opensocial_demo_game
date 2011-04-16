@@ -39,10 +39,12 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 <p>Hello <?= $data[0]['result']['displayName'] ?> from Proxied Content.</p>
 
-<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="ViewerFriends">
+<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="ViewerFriends,highscores" autoUpdate="true">
     <ul>
         <li repeat="${ViewerFriends}">
-            ${Cur.displayName}
+            <span context="${Cur}">
+            ${displayName} (${Top.highscores[id]})
+            </span>
         </li>
     </ul>
 </script>
@@ -94,6 +96,15 @@ $data = json_decode(file_get_contents('php://input'), true);
             });
         });
     }
+    function loadOtherHighScores() {
+        osapi.http.get({
+            'href' : 'http://localhost:8062/demo_game/backend/highscores.php',
+            'format' : 'json',
+            'authz' : 'signed'
+        }).execute(function(response){
+            opensocial.data.DataContext.putDataSet('highscores', response.content);
+        });
+    }
     function loadCurrentHighScore() {
         osapi.http.get({
             'href' : 'http://localhost:8062/demo_game/backend/highscore.php',
@@ -116,5 +127,6 @@ $data = json_decode(file_get_contents('php://input'), true);
     gadgets.util.registerOnLoadHandler(function() {
         loadQuestion();
         loadCurrentHighScore();
+        loadOtherHighScores();
     });
 </script>

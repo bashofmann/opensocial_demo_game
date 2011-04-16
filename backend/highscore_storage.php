@@ -36,10 +36,13 @@ class HighScoreStorage {
     }
 
     public function getHighScores() {
-        $stmt = $this->_db->prepare("SELECT score, user_id FROM highscore ORDER BY score DESC LIMIT 10");
+        $scores = array();
+        $stmt = $this->_db->prepare("SELECT score, user_id FROM highscore");
         $result = $stmt->execute();
-        $result = $result->fetchArray(SQLITE3_ASSOC);
-        return $result;
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $scores[$row['user_id']] = $row['score'];
+        }
+        return $scores;
     }
 
     public function increment($userId) {
