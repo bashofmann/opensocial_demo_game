@@ -31,6 +31,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 ?>
 <script xmlns:os="http://ns.opensocial.org/2008/markup" type="text/os-data">
     <os:PeopleRequest key="Viewer" userId="@viewer" fields="name" groupId="@self"/>
+    <os:PeopleRequest key="ViewerFriends" userId="@viewer" fields="name" groupId="@friends"/>
 </script>
 <script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="Viewer">
     Hello ${Viewer.name.givenName} <b>${Viewer.name.familyName}</b>
@@ -38,6 +39,13 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 <p>Hello <?= $data[0]['result']['displayName'] ?> from Proxied Content.</p>
 
+<script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="ViewerFriends">
+    <ul>
+        <li repeat="${ViewerFriends}">
+            ${Cur.displayName}
+        </li>
+    </ul>
+</script>
 <script type="text/os-template" xmlns:os="http://ns.opensocial.org/2008/markup" require="highscore" autoUpdate="true">
     <h3>
         Your current HighScore: ${highscore}
@@ -70,6 +78,7 @@ $data = json_decode(file_get_contents('php://input'), true);
                     'answer' : $(this).html()
                 })
             }).execute(function(response) {
+                console.log(response);
                 opensocial.data.DataContext.putDataSet('lastAnswer', response.content);
                 loadCurrentHighScore();
                 loadQuestion();

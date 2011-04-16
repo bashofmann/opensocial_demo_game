@@ -26,7 +26,7 @@ class HighScoreStorage {
 
     public function get($userId) {
         $stmt = $this->_db->prepare("SELECT score FROM highscore where user_id = :user_id");
-        $stmt->bindValue(':user_id', $userId, SQLITE3_INTEGER);
+        $stmt->bindValue(':user_id', $userId, SQLITE3_TEXT);
         $result = $stmt->execute();
         $result = $result->fetchArray(SQLITE3_ASSOC);
         if (! $result) {
@@ -45,7 +45,7 @@ class HighScoreStorage {
     public function increment($userId) {
         $oldScore = $this->get($userId);
         $stmt = $this->_db->prepare("REPLACE INTO highscore (user_id, score) VALUES (:user_id, :score)");
-        $stmt->bindValue(':user_id', $userId, SQLITE3_INTEGER);
+        $stmt->bindValue(':user_id', $userId, SQLITE3_TEXT);
         $stmt->bindValue(':score', $oldScore + 1, SQLITE3_INTEGER);
         $stmt->execute();
     }
