@@ -95,6 +95,39 @@ $data = json_decode(file_get_contents('php://input'), true);
                 opensocial.requestSendMessage(recipient, message);
             });
         });
+        $('a.link_post_to_twitter').unbind('click').click(function() {
+            postToTwitter();
+        });
+    }
+    function postToTwitter() {
+        var fetchData = function() {
+            var params = {};
+            params[gadgets.io.RequestParameters.AUTHORIZATION]=gadgets.io.AuthorizationType.OAUTH;
+            params[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME]='Twitter';
+            params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+            params[gadgets.io.RequestParameters.POST_DATA] = gadgets.io.encodeValues({
+              status : "Just finished planning my road trip through california next month"
+            });
+            gadgets.io.makeRequest('http://api.twitter.com/1/statuses/update.json', function(response) {
+
+                console.log(response);
+                if (response.oauthApprovalUrl) {
+                    console.log('open popup with ' + response.oauthApprovalUrl);
+                    var popup = new gadgets.oauth.Popup(
+                        response.oauthApprovalUrl,
+                        'width=400&height=400',
+                        function() { },
+                        function() {
+                            fetchData();
+                        }
+                        );
+
+                    popup.onClick_();
+                }
+            }, params );
+        }
+
+        fetchData();
     }
     function loadOtherHighScores() {
         osapi.http.get({

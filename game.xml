@@ -11,6 +11,15 @@
         <Require feature="org.jquery.core-1.4.2" />
         <Require feature="embed" />
         <Require feature="invite" />
+        <Require feature="oauthpopup" />
+        <OAuth>
+          <Service name="Twitter">
+            <Request url="https://api.twitter.com/oauth/request_token" param_location="uri-query" />
+            <Access url="https://api.twitter.com/oauth/access_token" param_location="uri-query" />
+            <Authorization url="https://api.twitter.com/oauth/authorize" param_location="uri-query" />
+          </Service>
+        </OAuth>
+        <AllowedDomain name="api.twitter.com" />
         <AllowedDomain name="localhost" />
     </ModulePrefs>
     <Content type="html" view="canvas,profile,mobilecanvas" href="proxiedContent.php" authz="signed">

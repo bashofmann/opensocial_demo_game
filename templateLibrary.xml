@@ -16,5 +16,6 @@
         </ul>
         <p>You have ${counter} options</p>
         <a href="javascript:;" class="link_post_to_wall" id="link_${question.id}">post to wall</a>
+        <a href="javascript:;" class="link_post_to_twitter">post to twitter</a>
     </Template>
 </Templates>
